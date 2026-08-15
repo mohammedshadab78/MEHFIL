@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Mehfil — Old tapes. Warm voices. One endless evening.</title>
+    <link rel="icon" href="assets/skh.png">
+    <meta name="description" content="Mehfil — A nostalgic South Asian qawwali radio archive. Old tapes, warm voices, one endless evening.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- ========== BACKGROUND LAYERS ========== -->
+    <div class="hero-bg" aria-hidden="true">
+        <!-- Ken Burns background image layer -->
+        <div class="hero-bg__image"></div>
+        <!-- Drifting dust/ember particle canvas -->
+        <canvas id="particle-canvas" class="particle-canvas"></canvas>
+        <!-- Flickering ambient glow -->
+        <div class="ambient-glow" aria-hidden="true"></div>
+        <!-- Grain overlay -->
+        <div class="grain-overlay" aria-hidden="true"></div>
+    </div>
+
+    <!-- ========== TOP BAR ========== -->
+    <header class="top-bar" role="banner">
+        <div class="top-bar__left">
+            <span class="top-bar__location">JABALPUR &bull; INDIA</span>
+            <span class="top-bar__time" id="ist-clock" aria-live="off">
+                <span id="ist-clock-hours">10</span><span class="clock-colon">:</span><span id="ist-clock-minutes">42</span>
+                <span id="ist-clock-ampm">PM</span>
+            </span>
+        </div>
+        <div class="top-bar__center">
+            <span class="live-dot" aria-hidden="true"></span>
+            <span class="top-bar__radio-text">&bullet; MEHFIL RADIO</span>
+        </div>
+        <nav class="top-bar__right" aria-label="Primary navigation">
+            <a href="#about" class="top-bar__link">ABOUT</a>
+            <a href="#collection" class="top-bar__link">COLLECTION</a>
+        </nav>
+    </header>
+
+    <!-- ========== MAIN CONTENT ========== -->
+    <main class="main-content" role="main">
+
+        <!-- ========== HERO SECTION ========== -->
+        <section class="hero fade-in-up" aria-label="Mehfil hero">
+            <p class="hero__tagline">EST. 1992 &bull; ANALOG SOUL &bull; DIGITAL AIRWAVES</p>
+            <h1 class="hero__title">MEHFIL</h1>
+            <p class="hero__subtitle">Old tapes. Warm voices. One endless evening.</p>
+        </section>
+
+        <!-- ========== PLAYER SECTION ========== -->
+        <section class="player-section fade-in-up" aria-label="Music player" style="animation-delay:0.2s">
+            <div class="player" id="player" role="region" aria-label="Audio player">
+                <!-- Vinyl record -->
+                <div class="vinyl-container" id="vinyl-container">
+                    <div class="vinyl" id="vinyl" aria-hidden="true">
+                        <div class="vinyl__grooves"></div>
+                        <div class="vinyl__label" id="vinyl-label">
+                            <span class="vinyl__label-text" id="vinyl-label-text">MEHFIL</span>
+                        </div>
+                        <div class="vinyl__spindle"></div>
+                        <div class="vinyl__sheen"></div>
+                    </div>
+                </div>
+
+                <!-- Player body -->
+                <div class="player__body">
+                    <!-- Track info -->
+                    <div class="track-info" id="track-info">
+                        <span class="track-info__now-playing">NOW PLAYING</span>
+                        <!-- Equalizer bars (animated when playing) -->
+                        <div class="equalizer" id="equalizer" aria-hidden="true">
+                            <span class="equalizer__bar"></span>
+                            <span class="equalizer__bar"></span>
+                            <span class="equalizer__bar"></span>
+                        </div>
+                        <h2 class="track-info__title" id="track-title" title="">—</h2>
+                        <p class="track-info__artist" id="track-artist">—</p>
+                        <p class="track-info__meta" id="track-meta">—</p>
+                    </div>
+
+                    <!-- Seek bar -->
+                    <div class="seek-bar"
+                    id="seek-bar"
+                    role="slider"
+                    aria-label="Seek"
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                    aria-valuenow="0"
+                    aria-valuetext="0:00 of 0:00"
+                    tabindex="0"
+                    touch-action="none">
+                    <div class="seek-bar__rail"></div>
+                    <div class="seek-bar__progress" id="seek-progress" style="width: 0%;"></div>
+                    <div class="seek-bar__knob" id="seek-knob" style="left: 0%;"></div>
+                </div>
+
+                <!-- Time display -->
+                <div class="time-display">
+                    <span id="time-current">0:00</span>
+                    <span class="time-display__separator">/</span>
+                    <span id="time-duration">0:00</span>
+                </div>
+
+                <!-- Transport controls -->
+                <div class="transport-controls" role="group" aria-label="Playback controls">
+                    <button class="transport-btn transport-btn--prev" id="btn-prev" aria-label="Previous track" title="Previous (P)">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <polygon points="19 20 9 12 19 4 19 20"></polygon>
+                            <line x1="5" y1="19" x2="5" y2="5"></line>
+                        </svg>
+                    </button>
+                    <button class="transport-btn transport-btn--play" id="btn-play" aria-label="Play" title="Play (Space)">
+                        <svg id="icon-play" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true">
+                            <polygon points="6 4 20 12 6 20 6 4"></polygon>
+                        </svg>
+                        <svg id="icon-pause" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true" style="display:none;">
+                            <rect x="5" y="4" width="4" height="16" rx="1"></rect>
+                            <rect x="15" y="4" width="4" height="16" rx="1"></rect>
+                        </svg>
+                    </button>
+                    <button class="transport-btn transport-btn--next" id="btn-next" aria-label="Next track" title="Next (N)">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <polygon points="5 4 15 12 5 20 5 4"></polygon>
+                            <line x1="19" y1="5" x2="19" y2="19"></line>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Volume control -->
+                <div class="volume-control" id="volume-control">
+                    <button class="volume-btn" id="btn-volume" aria-label="Toggle volume" title="Volume">
+                        <svg id="icon-volume-high" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                            <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+                        </svg>
+                        <svg id="icon-volume-low" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:none;">
+                            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                        </svg>
+                    </button>
+                    <div class="volume-slider" id="volume-slider" role="slider" aria-label="Volume" aria-valuemin="0" aria-valuemax="100" aria-valuenow="80" tabindex="0" touch-action="none">
+                        <div class="volume-slider__rail"></div>
+                        <div class="volume-slider__progress" id="volume-progress" style="width: 80%;"></div>
+                        <div class="volume-slider__knob" id="volume-knob" style="left: 80%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== COLLECTION SECTION ========== -->
+    <section class="collection fade-in-up" id="collection" aria-label="Track collection" style="animation-delay:0.4s">
+        <div class="collection__header">
+            <h2 class="collection__title">THE SHELF</h2>
+            <span class="collection__count" id="track-count">12 TRACKS</span>
+        </div>
+
+        <!-- Playlist tabs -->
+        <div class="playlist-tabs" role="tablist" aria-label="Playlists">
+            <button class="playlist-tab is-active" role="tab" aria-selected="true" data-playlist="mehfil" id="tab-mehfil">THE MEHFIL</button>
+            <button class="playlist-tab" role="tab" aria-selected="false" data-playlist="cassette" id="tab-cassette">CASSETTE SHELF</button>
+            <button class="playlist-tab" role="tab" aria-selected="false" data-playlist="lateNight" id="tab-lateNight">LATE NIGHT</button>
+        </div>
+
+        <!-- Track list -->
+        <div class="track-list" id="track-list" role="listbox" aria-label="Track list">
+            <!-- Track items will be rendered by JavaScript -->
+        </div>
+    </section>
+
+    <!-- ========== ABOUT SECTION ========== -->
+    <section class="about fade-in-up" id="about" aria-label="About Mehfil" style="animation-delay:0.6s">
+        <div class="about__content">
+            <h2 class="about__title">About the Mehfil</h2>
+            <p class="about__text">
+                A mehfil is a gathering — a late-night assembly of voices, verses, and quiet listeners.
+                This archive is a digital re-creation of those evenings: dusty cassettes, warm tungsten light,
+                the hum of an old amplifier, and the raw, unpolished beauty of qawwali.
+            </p>
+            <p class="about__text">
+                Est. 1992. Analog soul. Digital airwaves. Every track lives on this shelf, played directly
+                from local audio files — no streaming, no algorithms, no interruptions.
+            </p>
+            <p class="about__footer">&mdash; Jabalpur, India</p>
+        </div>
+    </section>
+</main>
+
+<!-- ========== AUDIO ELEMENT (hidden) ========== -->
+<audio id="audio-element" preload="metadata"></audio>
+
+<script src="app.js"></script>
+</body>
+</html>
